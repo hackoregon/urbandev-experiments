@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+</head>
+<body>
+  <h1>Radar Chart implemented with <a href="http://www.chartjs.org/docs/#radar-chart">Chart.js</a></h1>
+  <p>
+    2010 data obtained from:
+    <ul><li>
+      U.S. Census data:
+      <a href="http://api.census.gov/data/2010/sf1?get=NAME,P0120001,P012A001,P012B001,P012C001,P012D001,P012E001,P012F001,P012G001,P012H001,P012I001&for=tract:001900,008902,000601,000602&in=state:41+county:051">Persons by Race</a> 
+      and 
+      <a href="http://api.census.gov/data/2010/sf1?get=NAME,H0100001,H0110002,H0110003,H0110004&for=tract:001900,008902,000601,000602&in=state:41+county:051">Housing Units by Tenure</a>.
+      <br>
+      <a href="https://gist.github.com/jimtyhurst/cb7caef1db70f34e221f#samples">urbanDev-usCensus-analysis.md</a>
+      explains how the census data was analyzed.
+    </li><li>
+      Portland <a href="http://ec2-52-88-193-136.us-west-2.compute.amazonaws.com/services/crimes.json?type=violent&year=2010&query=perNeighborhoodPerYear">crime data</a>,
+      which was obtained from the 
+      <a href="http://ec2-52-88-193-136.us-west-2.compute.amazonaws.com/services/crimes">PlotPDX API</a>.
+    </li></ul>
+  </p>
+  <canvas id="radar-chart-canvas" width="200" height="200" style="border:1px solid #000000;">
+    This radar chart comparing two neighborhoods uses an HTML5 canvas element,
+    which is not supported by your browser.
+  </canvas>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.0.1/Chart.bundle.min.js"></script>
+  <script src="census-radar-chart.js"></script>
+</body>
+</html>
