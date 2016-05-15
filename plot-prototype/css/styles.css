@@ -1,0 +1,125 @@
+html {
+  box-sizing: border-box;
+  overflow-y: scroll;
+}
+*, *:before, *:after {
+  box-sizing: inherit;
+}
+html, body {
+  margin: 0;
+  padding: 0;
+  font-family: "Lato", sans-serif;
+}
+#map {
+  width: 100%;
+  height:100%;
+  position: absolute;
+}
+.pull-right {
+    float: right!important;
+}
+header {
+    height: 55px;
+    color: white;
+    background: #fff;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    text-align: center;
+    margin: 0px auto;
+    z-index: 999999;
+    background-image: -webkit-linear-gradient(top,#fff 0,#f8f8f8 100%);
+    background-image: -o-linear-gradient(top,#fff 0,#f8f8f8 100%);
+    background-image: -webkit-gradient(linear,left top,left bottom,from(#fff),to(#f8f8f8));
+    background-image: linear-gradient(to bottom,#fff 0,#f8f8f8 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffffff', endColorstr='#fff8f8f8', GradientType=0);
+    filter: progid:DXImageTransform.Microsoft.gradient(enabled=false);
+    background-repeat: repeat-x;
+    border-radius: 4px;
+    -webkit-box-shadow: inset 0 1px 0 rgba(255,255,255,.15),0 1px 5px rgba(0,0,0,.075);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.15),0 1px 5px rgba(0,0,0,.075);
+}
+
+header .header-wrap {
+  margin: 0px auto; 
+  position: relative;
+}
+
+header .title-text {
+    position: absolute;
+    left: 20px;
+    top: 0px;
+    width: auto;
+    text-align: center;
+    margin: 0px auto;
+    text-decoration: none;
+    color: #5a5a5a;
+    font-weight: bold;
+    font-size: 18px;
+    line-height: 55px;
+}
+
+nav {
+    margin-right: 20px;
+}    
+.nav-item {
+    position: relative;
+    display: inline-block;
+    padding: 0px 11px;
+    color: #5a5a5a;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 16px;
+    line-height: 55px;
+}
+
+header .start-button,header .stop-button {
+  text-decoration:underline; 
+  cursor:pointer;
+  font-weight:bold;
+}
+
+header .disabled {
+  cursor: normal;
+  opacity: 0.5;
+}
+
+#neighborhood-hover {
+  position: absolute;
+  top: 65px;
+  left:10px;
+  z-index:999;
+  background: #444;
+  color:#fff;
+  padding:10px;
+  border-radius: 4px;
+}
+
+#sidebar {
+  width:500px;
+  height:100%;
+  position: absolute;
+  right: 0;
+  top: 55px;
+  background: #fff;
+  box-shadow: 0 0 10px #000;
+}
+
+#sidebar .sidebar-header {
+  height: 130px;
+  background: #e6e6e6;
+  padding: 25px;
+}
+
+#sidebar .sidebar-header h2 {
+  margin-top:0;
+  font-size: 20px;
+}
+
+#sidebar .data {
+  height: auto;
+  overflow-y: scroll;
+}
+
+

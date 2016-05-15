@@ -1,0 +1,53 @@
+
+RegionID.json
+
+## block groups
+
+* just shapes
+* around 9-10 per neighborhood
+
+## zillow data (line chart)
+
+* median home value per sqft over time (1996-2016)
+* median sold price per sqft over time (1996-2016)
+* zillow ZRI, rental estimate over time (2010-2016)
+
+## census data - radar plot
+
+*
+
+JSON
+{
+  "RegionName": “asd”,
+  "RegionID": 123,
+  "Blockgroups" : [
+    { ..geojson blockgroup 1 },
+    { ..geojson blockgroup 2 },
+  ],  
+  "Zillow" : {
+    "ZRI" : {
+      "Months": [“1996-01”, “1996-02”],
+      "Values":  [1, 1.2 ]
+    }
+  },
+  "Census" : {
+    "Education" : {
+      "BachelorsDegrees" : {
+      "Years" : [1990, 2000, 2009, 2014],
+      "Values" : [1, 2, 3, 4]  
+      }
+    },
+    "Income" : {
+      "Years" : [1990, 2000, 2009, 2014],
+      "Values" : [1, 2, 3, 4]  
+    }.
+    "HomeOwnership" { ... },
+    "Race" {
+      "Years" : [1990, 2000, 2009, 2014],
+      "Values" : [{
+        "White":"50",
+      }] 
+    },
+    "Race" { ... }
+  }
+}

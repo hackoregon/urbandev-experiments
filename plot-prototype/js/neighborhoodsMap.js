@@ -5,14 +5,14 @@ var nbMap = {
   currentMonth: null,
   monthIndex: 0,
   hslMaxValue : 340, // this should be the max value in dataset
-  dataPath: '/data/zillow_med_val_sqft.json', // specify json data set here
+  //dataPath: '/data/zillow_med_val_sqft.json', // specify json data set here
   timeIntervalMs:  100, // time in milliseconds for each year/month
   intervalId: null,
   map: null,
   data: null,
   mapElement: $('#map')[0],
   geoJSONPath : '/data/neighborhoods.json',  // geojson shapefiles (from zillow)
-  monthsArray : [],
+  neighborhoodsArray : [],
   googleMapParams : {
     zoom: 12,
     panControl: true,
@@ -23,13 +23,16 @@ var nbMap = {
     disableDefaultUI: true
   },
   hoverStyle:{        
-    strokeWeight: 4,
-    fillColor: "blue"
+    strokeWeight: 4
   },
   disabledStyle : {    
     strokeWeight: 1,
-    fillColor: "transparent"
-  }
+    fillColor: "#1396d9"
+  },
+  selectedStyle : {    
+    strokeWeight: 1,
+    fillColor: "#1396d9"
+  }  
 };
 
 nbMap.getFileName = function(path){
@@ -57,6 +60,21 @@ nbMap.loadData = function (callback) {
   });
 };
 
+nbMap.createNeighborhoodsDropdown = function (){
+
+  var html = "",
+      template = '<option value="{id}">{name}</option>',
+      nSelect = $("#neighborhoodSelector"),
+      nArray = nbMap.neighborhoodsArray.sort(function(a,b) {return (a.Name > b.Name) ? 1 : ((b.Name > a.Name) ? - 1 : 0);} );
+
+  for( var i=0; i<nArray.length; i++) {
+    var item = nArray[i];
+    html+=template.replace("{id}",item.ID).replace("{name}",item.Name)
+  }
+
+  nSelect.html(html).select2();
+};
+
 nbMap.addDataPoint = function(e) {
   if(e.feature.getGeometry().getType()==='Polygon'){
       
@@ -67,24 +85,19 @@ nbMap.addDataPoint = function(e) {
       });
       e.feature.setProperty('bounds',bounds);
       
-      // Default to RegionID, use datapoint if available        
-      var labelText = '';
-      try {
-        var arr = nbMap.data[nbMap.currentMonth];
-        var id = e.feature.H.REGIONID
-        for( var i=0;i<arr.length;i++) {
-          if( arr[i].RegionID == id) {
-            labelText = roundVal( arr[i].Value );
-            break;
-          }
-        } 
-      }catch(e) {}
+      // Default to RegionID, use datapoint if available
+      nbMap.neighborhoodsArray.push({
+        "Name":e.feature.H.NAME, 
+        "ID" : e.feature.H.REGIONID, 
+        "Center" : bounds.getCenter() 
+      });
 
+      var labelText = e.feature.H.NAME;
       var labelDiv = document.createElement("div");
       labelDiv.innerHTML = labelText;
       labelDiv.setAttribute("class", "shape-label");
       labelDiv.setAttribute("id", "shape-" + e.feature.H.REGIONID);
-      labelDiv.setAttribute("style", "color:#000;font-weight:bold;");
+      labelDiv.setAttribute("style", "color:#444;");
 
       var boxOptions = {
         content: labelDiv,
@@ -92,7 +105,7 @@ nbMap.addDataPoint = function(e) {
         boxStyle: {
           border: "none",
           textAlign: "center",
-          fontSize: "16px",
+          fontSize: "12px",
           width: "50px"
         },
         disableAutoPan: true,
@@ -136,39 +149,113 @@ nbMap.setFeatureStyle = function(feature) {
   });
 };
 
+nbMap.resizeMap = function() {
+  var w = $(window);
+  w.resize(function() {
+    $("#map").width(w.width()-500);
+    $("#sidebar").height(w.height()-55);
+  });
+  w.resize();
+};
+
+nbMap.createGraph = function( data ) {
+  
+    $('#container').highcharts({
+        title: {
+            text: 'Median Home Value Per Sqft',
+            x: -20 //center
+        },
+        subtitle: {
+            text: 'Source: Zillow',
+            x: -20
+        },
+        xAxis: {
+            categories: data.Months
+        },
+        yAxis: {
+            title: {
+                text: 'Home Value Per Sqft'
+            },
+            plotLines: [{
+                value: 0,
+                width: 1,
+                color: '#808080'
+            }]
+        },
+        
+        series: [{
+           
+            data: data.Values
+        }]
+    });
+};
+
+nbMap.selectRegion = function( regionID ) {
+
+  var dataPath = "/data/" + regionID + ".json";
+
+  $.ajax({
+    dataType: 'json',
+    url: dataPath,
+    success: function (data) {      
+      nbMap.data = data;
+      console.log(data);
+      nbMap.createGraph(data.Zillow.MedianValue_sqft);
+      
+      // load blockgroups geojson
+
+      // populate census graphs
+
+      // populate zillow graphs
+
+      //$(".data").text(JSON.stringify(data));
+      $("#neighborhoodSelector").val(regionID).trigger("change");
+
+      // pan to element
+      nbMap.map.panTo(nbMap.neighborhoodsArray[7].Center);
+    },
+    error: function (e) {
+      console.log("error getting data");
+      console.log(e);
+    }
+  });
+};
+
 nbMap.init = function() {
 
-  nbMap.loadData(function(){
+  // Create Map
+  nbMap.map = new google.maps.Map(nbMap.mapElement, nbMap.googleMapParams);
 
-    // Create months array
-    nbMap.months = Object.keys(nbMap.data).sort();
-    nbMap.currentMonth = nbMap.months[0];
-    $('.year').text(nbMap.currentMonth);
-    $(".source").text(nbMap.getFileName(nbMap.dataPath));
+  // Create datapoint object for each geojson shape
+  google.maps.event.addListener(nbMap.map.data,'addfeature', nbMap.addDataPoint);
 
-    // Create Map
-    nbMap.map = new google.maps.Map(nbMap.mapElement, nbMap.googleMapParams);
-
-    // Create datapoint object for each geojson shape
-    google.maps.event.addListener(nbMap.map.data,'addfeature', nbMap.addDataPoint);
-
-    // Load GeoJSON (zillow)
-    nbMap.map.data.loadGeoJson(nbMap.geoJSONPath);
-
-    // Set mouseover event for each feature
-    nbMap.map.data.addListener('mouseover', function(event) {
-      if( nbMap.running ) {      
-        return; // disable mouseover when running
-      }
-      nbMap.map.data.revertStyle();
-      nbMap.map.data.overrideStyle(event.feature, nbMap.hoverStyle);
-      $(".region").text(event.feature.H.NAME);
-    });
-
-    // Set Default Style
-    nbMap.setFeatureStyle();
-
+  // Load GeoJSON (zillow)
+  nbMap.map.data.loadGeoJson(nbMap.geoJSONPath, null, function (features) {
+    // Create dropdown after geojson loads (and we have all neighborhood names)
+    nbMap.createNeighborhoodsDropdown();
   });
+
+  // Set mouseover event for each feature
+  nbMap.map.data.addListener('mouseover', function(event) {
+    if( nbMap.running ) {      
+      return; // disable mouseover when running
+    }
+    nbMap.map.data.revertStyle();
+    nbMap.map.data.overrideStyle(event.feature, nbMap.hoverStyle);
+    $("#neighborhood-hover").text(event.feature.H.NAME);
+  });
+
+  nbMap.map.data.addListener('click', function(event) {
+    nbMap.selectRegion( event.feature.H.REGIONID );
+  });
+
+  // Set Default Style
+  nbMap.setFeatureStyle();
+
+  // Resize map and set up autosizing events
+  nbMap.resizeMap();
+
+  
 };
 
 nbMap.updateInfobox = function( feature) {
