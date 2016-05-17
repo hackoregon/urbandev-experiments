@@ -23,23 +23,25 @@
   <div id="neighborhood-hover">None</div>
   <div id="map"></div>
   <div id="sidebar">
-    <div class="sidebar-header">
-      
-      <div id="summaryCountContainer" class="summaryCountContainer">
-            <div id="summaryCount">23</div>
-            <div id="summaryListingLabel">Total Neighborhoods</div>
+    <div class="sidebar-header">      
+      <div class="summary-container">
+            <div id="neighborhood-summary">23</div>
+            <div class="summary-label">Total Neighborhoods</div>
       </div>
       <h2>Portland Neighborhoods</h2> 
       <span class="neighborhood-label">Select Neighborhood:</span> 
-      <select id="neighborhoodSelector"></select>
+      <select id="neighborhood-dropdown"></select>
     </div>
-    <div class="data-section">
-      <h2>Neighborhood Data</h2>
-      <div id="graph-home-value" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
-    </div>    
-    <div class="data-section">
-      <h2>Demographics Data</h2>
-      
+    <div class="sidebar-body">
+      <div class="data-section">
+        <h2>Neighborhood Data</h2>
+        <div id="graph-home-value" style="min-width: 310px; height: 300px; margin: 0 auto"></div>
+      </div>    
+      <div class="data-section">
+        <h2>Demographics Data</h2> 
+          <p>No Data</p>
+
+      </div>
     </div>
   </div>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
