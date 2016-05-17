@@ -10,9 +10,11 @@ var nbMap = {
   intervalId: null,
   map: null,
   data: null,
+
   mapElement: $('#map')[0],
   geoJSONPath : '/data/neighborhoods.json',  // geojson shapefiles (from zillow)
   neighborhoodsArray : [],
+  neighborhoodsObject : {},
   googleMapParams : {
     zoom: 12,
     panControl: true,
@@ -22,16 +24,17 @@ var nbMap = {
     styles: [{stylers: [{saturation: -100}]}],
     disableDefaultUI: true
   },
-  hoverStyle:{        
-    strokeWeight: 4
+  hoverStyle:{     
+    fillColor: "grey", 
+    strokeWeight: 2
   },
   disabledStyle : {    
     strokeWeight: 1,
     fillColor: "#1396d9"
   },
   selectedStyle : {    
-    strokeWeight: 1,
-    fillColor: "#1396d9"
+    strokeWeight: 4,
+    fillColor: "#7ec9ac"
   }  
 };
 
@@ -60,7 +63,7 @@ nbMap.loadData = function (callback) {
   });
 };
 
-nbMap.createNeighborhoodsDropdown = function (){
+nbMap.createNeighborhoodsDropdown = function () {
 
   var html = "",
       template = '<option value="{id}">{name}</option>',
@@ -72,7 +75,9 @@ nbMap.createNeighborhoodsDropdown = function (){
     html+=template.replace("{id}",item.ID).replace("{name}",item.Name)
   }
 
-  nSelect.html(html).select2();
+  nSelect.html(html).select2({
+    placeholder: "Select a neighborhood"
+  });
 };
 
 nbMap.addDataPoint = function(e) {
@@ -85,12 +90,14 @@ nbMap.addDataPoint = function(e) {
       });
       e.feature.setProperty('bounds',bounds);
       
-      // Default to RegionID, use datapoint if available
-      nbMap.neighborhoodsArray.push({
+      // Push data object with feature data to array and object
+      var dataObject = {
         "Name":e.feature.H.NAME, 
         "ID" : e.feature.H.REGIONID, 
-        "Center" : bounds.getCenter() 
-      });
+        "Center" : bounds.getCenter()
+      };
+      nbMap.neighborhoodsArray.push(dataObject);
+      nbMap.neighborhoodsObject[e.feature.H.REGIONID] = dataObject;
 
       var labelText = e.feature.H.NAME;
       var labelDiv = document.createElement("div");
@@ -116,8 +123,8 @@ nbMap.addDataPoint = function(e) {
         pane: "mapPane",
         enableEventPropagation: true
       };
-      var ib = new InfoBox(boxOptions);              
-      ib.open(nbMap.map);
+      //var ib = new InfoBox(boxOptions);              
+      //ib.open(nbMap.map);
     }
 };
 
@@ -149,6 +156,12 @@ nbMap.setFeatureStyle = function(feature) {
   });
 };
 
+nbMap.setFeatureStyle2 = function(feature, style) {
+  nbMap.map.data.setStyle(function(feature) {                    
+    return style;
+  });
+};
+
 nbMap.resizeMap = function() {
   var w = $(window);
   w.resize(function() {
@@ -160,14 +173,14 @@ nbMap.resizeMap = function() {
 
 nbMap.createGraph = function( data ) {
   
-    $('#container').highcharts({
+    $('#graph-home-value').highcharts({
+        chart: {
+            backgroundColor: '#F5F5F5',
+            type: 'line'
+        },
         title: {
             text: 'Median Home Value Per Sqft',
             x: -20 //center
-        },
-        subtitle: {
-            text: 'Source: Zillow',
-            x: -20
         },
         xAxis: {
             categories: data.Months
@@ -182,9 +195,7 @@ nbMap.createGraph = function( data ) {
                 color: '#808080'
             }]
         },
-        
-        series: [{
-           
+        series: [{           
             data: data.Values
         }]
     });
@@ -212,11 +223,16 @@ nbMap.selectRegion = function( regionID ) {
       $("#neighborhoodSelector").val(regionID).trigger("change");
 
       // pan to element
-      nbMap.map.panTo(nbMap.neighborhoodsArray[7].Center);
+      nbMap.map.panTo(nbMap.neighborhoodsObject[regionID].Center);
     },
     error: function (e) {
       console.log("error getting data");
       console.log(e);
+    //$(".data").text(JSON.stringify(data));
+      $("#neighborhoodSelector").val(regionID).trigger("change");
+
+      // pan to element
+      nbMap.map.panTo(nbMap.neighborhoodsObject[regionID].Center);      
     }
   });
 };
@@ -233,29 +249,36 @@ nbMap.init = function() {
   nbMap.map.data.loadGeoJson(nbMap.geoJSONPath, null, function (features) {
     // Create dropdown after geojson loads (and we have all neighborhood names)
     nbMap.createNeighborhoodsDropdown();
+    $("#summaryCount").text(nbMap.neighborhoodsArray.length);
   });
 
-  // Set mouseover event for each feature
+  // Set mouseover event for each feature (neighborhood)
   nbMap.map.data.addListener('mouseover', function(event) {
-    if( nbMap.running ) {      
-      return; // disable mouseover when running
-    }
     nbMap.map.data.revertStyle();
     nbMap.map.data.overrideStyle(event.feature, nbMap.hoverStyle);
     $("#neighborhood-hover").text(event.feature.H.NAME);
   });
 
-  nbMap.map.data.addListener('click', function(event) {
-    nbMap.selectRegion( event.feature.H.REGIONID );
+  nbMap.map.data.setStyle(function(feature) {
+    if (feature.getProperty('isSelected')) {
+      return nbMap.selectedStyle;
+    }
+    return nbMap.disabledStyle;
   });
 
-  // Set Default Style
-  nbMap.setFeatureStyle();
+  // Set click event for each feature (neighborhood)
+  nbMap.map.data.addListener('click', function(event) {
+    nbMap.map.data.forEach(function(feature) { 
+        feature.setProperty('isSelected', false);
+    });
+    event.feature.setProperty('isSelected', true);
+    nbMap.selectRegion( event.feature.H.REGIONID );
+    nbMap.map.data.overrideStyle(event.feature, nbMap.selectedStyle);
+  });
 
   // Resize map and set up autosizing events
   nbMap.resizeMap();
 
-  
 };
 
 nbMap.updateInfobox = function( feature) {
@@ -273,38 +296,4 @@ nbMap.updateInfobox = function( feature) {
     }
     $("#shape-" + id ).text(datapoint);
   } catch(e) {}
-};
-
-nbMap.start = function() {
-  if( this.running ) return;
-  this.running = true;
-  nbMap.intervalId = setInterval(nbMap.nextMonth, nbMap.timeIntervalMs);
-  $(".start-button").addClass("disabled");
-  $(".stop-button").removeClass("disabled");
-};
-
-nbMap.stop = function() {
-  if( !this.running ) return;
-  this.running = false;
-  clearInterval(nbMap.intervalId);
-  $(".stop-button").addClass("disabled");
-  $(".start-button").removeClass("disabled");  
-};
-
-nbMap.nextMonth = function() {
-
-  if (!nbMap.months[nbMap.monthIndex] || nbMap.monthIndex >= nbMap.months.length - 1 ) {    
-    nbMap.stop();
-    return;
-  }
-
-  // Loop through all features, update shape styles and datapoints
-  nbMap.map.data.forEach(function(feature) {
-      nbMap.setFeatureStyle(feature);
-      nbMap.updateInfobox(feature);
-  });
-
-  nbMap.monthIndex++;
-  nbMap.currentMonth = nbMap.months[nbMap.monthIndex];      
-  $('.year').text(nbMap.currentMonth);
 };

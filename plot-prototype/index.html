@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>PlotPDX Neighborhoods</title>
+    <title>PlotPDX Prototype</title>
     <meta name="viewport"
         content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta charset="UTF-8">
@@ -11,7 +11,7 @@
 </head>
 <body>
   <header>
-      <div class="header-wrap">              
+      <div class="header-wrap">
         <h1 class="title-text">PlotPDX Prototype</h1>
         <nav class="nav pull-right">            
             <a class="nav-item" href="#">About</a>
@@ -24,11 +24,22 @@
   <div id="map"></div>
   <div id="sidebar">
     <div class="sidebar-header">
-      <h2>Portland Neighborhoods</h2>
-      <select id="neighborhoodSelector"></select>      
+      
+      <div id="summaryCountContainer" class="summaryCountContainer">
+            <div id="summaryCount">23</div>
+            <div id="summaryListingLabel">Total Neighborhoods</div>
+      </div>
+      <h2>Portland Neighborhoods</h2> 
+      <span class="neighborhood-label">Select Neighborhood:</span> 
+      <select id="neighborhoodSelector"></select>
     </div>
-    <div class="data">
-      <div id="container" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+    <div class="data-section">
+      <h2>Neighborhood Data</h2>
+      <div id="graph-home-value" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+    </div>    
+    <div class="data-section">
+      <h2>Demographics Data</h2>
+      
     </div>
   </div>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
