@@ -1,4 +1,17 @@
 // Main
+
+// Utility Functions
+function roundVal(num) {    
+    return +(Math.round(num + "e+2")  + "e-2");
+}
+
+function sortByName(a, b){
+  var aName = a.Name.toLowerCase();
+  var bName = b.Name.toLowerCase(); 
+  return ((aName < bName) ? -1 : ((aName > bName) ? 1 : 0));
+}
+
+// Highcharts General Options
 Highcharts.setOptions({
    global: {
       useUTC: true
@@ -28,11 +41,7 @@ Highcharts.setOptions({
    ]
 });
 
-function roundVal(num) {    
-    return +(Math.round(num + "e+2")  + "e-2");
-}
-
 jQuery(document).ready(function($) {
-  nbMap.init();	
+  neighborhoods.init();	
 });
 
