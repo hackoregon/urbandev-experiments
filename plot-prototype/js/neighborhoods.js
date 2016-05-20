@@ -12,7 +12,7 @@ var neighborhoods = {
   neighborhoodsArray : [],
   neighborhoodsObject : {},
   googleMapParams : {
-    zoom: 11,
+    zoom: 12,
     panControl: true,
     zoomControl: true,
     center: new google.maps.LatLng(45.52306220000001,-122.67648159999999),
@@ -26,13 +26,22 @@ var neighborhoods = {
   },
   disabledStyle : {    
     strokeWeight: 1,
-    fillColor: "#1396d9"
+    fillOpacity: 0.6, 
+    fillColor: "#1396d9",
+    zIndex: 2
   },
   selectedStyle : {    
     strokeWeight: 4,
-    fillOpacity: 0.6, 
-    fillColor: "#7ec9ac"
-  }  
+    fillOpacity: 0.8, 
+    fillColor: "#7ec9ac",
+    zIndex: 3
+  },
+  blockgroupStyle : {    
+    strokeWeight: 0.5,
+    fillOpacity: 0.7, 
+    fillColor: "red",
+    zIndex: 1
+  } 
 };
 
 neighborhoods.createNeighborhoodsDropdown = function () {
@@ -74,7 +83,7 @@ neighborhoods.addDataPoint = function(e) {
       
       // Push data object with feature data to array and object
       var dataObject = {
-        "Name":e.feature.H.NAME, 
+        "Name":e.feature.H.NAME,
         "ID" : e.feature.H.REGIONID, 
         "Center" : bounds.getCenter(),
         "Feature" : e.feature
@@ -151,7 +160,7 @@ neighborhoods.createGraph = function( data ) {
             }]
         },
         series: [{
-            name: 'Media Home Value per sqft',         
+            name: 'Median Home Value per sqft',         
             data: data.Values
         }],
         lang: {
@@ -167,6 +176,47 @@ neighborhoods.createGraph = function( data ) {
             }
         }        
     });
+
+    $('#container-one').highcharts({
+
+        chart: {
+            polar: true,
+            type: 'line'
+        },
+
+        title: {
+            text: 'Budget vs spending',
+            x: -80
+        },
+
+        pane: {
+            size: '80%'
+        },
+
+        xAxis: {
+            categories: ['Population', '% Home Owners', '% Renters', 'Crime', 'Income'],
+            tickmarkPlacement: 'on',
+            lineWidth: 0
+        },
+
+        yAxis: {
+            gridLineInterpolation: 'polygon',
+            lineWidth: 0,
+            min: 0
+        },
+
+        tooltip: {
+            shared: true,
+            pointFormat: '<span style="color:{series.color}">{series.name}: <b>${point.y:,.0f}</b><br/>'
+        },
+
+        series: [{
+            name: 'Allocated Budget',
+            data: [43000, 19000, 60000, 35000],
+            pointPlacement: 'on'
+        }]
+
+    });    
 };
 
 neighborhoods.selectRegion = function( regionID ) { 
@@ -193,13 +243,20 @@ neighborhoods.selectRegion = function( regionID ) {
     // update select2 dropdown (without triggering another change event)
     that.elems.neighborhoodDropdown.val(regionID).trigger('change.select2');
 
-    // trigger resize (to make sure map updates)
+    // trigger resize (to make sure map updates) ????
     google.maps.event.trigger(map, 'resize');
 
     // populate zillow graph
     that.createGraph(d);
 
     // populate census graphs?
+
+    that.map.data.forEach(function(feature) {
+        //If you want, check here for some constraints.
+        if( typeof feature.getProperty('NAMELSAD10') != 'undefined' ) {
+          that.map.data.remove(feature);
+        }
+    });
 
   };
 
@@ -210,9 +267,13 @@ neighborhoods.selectRegion = function( regionID ) {
       
       // load blockgroups geojson
       // console.log( data.Blockgroups );
-      // that.map.data.addGeoJson(data.Blockgroups);
+      // all features loaded after zillow are blockgroups
+      //that.map.data.setStyle(function(feature) {
+      //  return that.blockgroupStyle;
+      //});
 
       updateView(data.Zillow.MedianValue_sqft);
+      that.map.data.addGeoJson(data.Blockgroups[0]);
     },
     error: function (e) {
       console.log("error getting data");
@@ -239,7 +300,10 @@ neighborhoods.init = function() {
 
   // set up selected style
   this.map.data.setStyle(function(feature) {
-    if (feature.getProperty('isSelected')) {
+    if( typeof feature.getProperty('NAMELSAD10') != 'undefined' ) {
+      return that.blockgroupStyle;
+    }
+    else if (feature.getProperty('isSelected')) {
       return that.selectedStyle;
     }
     return that.disabledStyle;
@@ -256,7 +320,14 @@ neighborhoods.init = function() {
 
   // set click event for each feature (neighborhood)
   this.map.data.addListener('click', function(event) {
-    that.selectRegion( event.feature.H.REGIONID );
+    
+    if( typeof event.feature.getProperty('NAMELSAD10') != 'undefined' ) {
+      console.log(event.feature);
+      event.feature.setProperty('isBlockgroup', true);
+    } 
+    else {
+      that.selectRegion( event.feature.H.REGIONID );  
+    } 
   });
 
   // resize map and set up autosizing events
