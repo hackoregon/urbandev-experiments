@@ -82,7 +82,7 @@ header .disabled {
   position: absolute;
   top: 65px;
   left:10px;
-  z-index:999;
+  z-index:5;
   background: #444;
   color:#fff;
   padding:10px;
@@ -185,4 +185,19 @@ header .disabled {
     background: url('select2.png') no-repeat 100% -22px, -moz-linear-gradient(center bottom, #fff 85%, #eee 99%);
     background: url('select2.png') no-repeat 100% -22px, linear-gradient(to bottom, #fff 85%, #eee 99%) 0 0;
 }
+
+.modal_text {
+  color: #f5f5f5;
+}
+
+.modal_close {
+  color: #f5f5f5;
+  position: absolute;
+  top: 30px !important;
+  right:50px !important;
+  text-decoration: none;
+  font-size: 50px;
+}
+
+
 

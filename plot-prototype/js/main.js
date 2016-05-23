@@ -11,6 +11,15 @@ function sortByName(a, b){
   return ((aName < bName) ? -1 : ((aName > bName) ? 1 : 0));
 }
 
+function registerNavModals(){
+  var navItems = $('.nav-item');
+  navItems.each(function(index, item){
+    var type = item.innerHTML,
+    template = './templates/' + type + '.html';
+    $(item).modal(template);
+  });
+}
+
 // Highcharts General Options
 Highcharts.setOptions({
    global: {
@@ -41,5 +50,6 @@ Highcharts.setOptions({
 
 jQuery(document).ready(function($) {
   neighborhoods.init();	
+  registerNavModals();
 });
 
