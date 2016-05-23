@@ -1,9 +1,9 @@
 (function($){
 	$.fn.modal = function(template){
 		var options = $.extend({
-			height : "80%",
+			height : "100%",
 			width : "100%",
-			top: "10%",
+			top: "55px",
 			left: "0",
 		});
 
@@ -30,14 +30,10 @@
 		'height': options.height,
 		'width': options.width,
 		'overflow-y': 'scroll',
-		'border':'1px solid #fff',
 		'box-shadow': '0px 2px 7px #292929',
 		'-moz-box-shadow': '0px 2px 7px #292929',
 		'-webkit-box-shadow': '0px 2px 7px #292929',
-		'border-radius':'10px',
-		'-moz-border-radius':'10px',
-		'-webkit-border-radius':'10px',
-		'background': '#f2f2f2', 
+		'background': '#000000', 
 		'z-index':'500000',
 	});
 	$('.modal_close').css({
@@ -50,9 +46,10 @@
 }
 
 	function add_popup_box(){
-		var pop_up = $('<div class="modal_box"><a href="#" class="modal_close"><div>X</div></a><div class="modal_content"</div></div>');
-			$(pop_up).appendTo('.block_page');
+		var pop_up = $('<div class="modal_box"><a href="#" class="modal_close">&#x2573</a><div class="modal_content"</div></div>');
+			$(pop_up).hide().appendTo('.block_page').fadeIn(200);
 			$('.modal_content').load(template);
+
 			 			 
 	$('.modal_close').click(function(){
             $('.block_page').fadeOut().remove();		
