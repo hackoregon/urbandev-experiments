@@ -5,6 +5,7 @@
 			width : "100%",
 			top: "55px",
 			left: "0",
+			fade: 500
 		});
 
 	function add_block_page(){
@@ -47,27 +48,36 @@
 
 	function add_popup_box(){
 		var pop_up = $('<div class="modal_box"><a href="#" class="modal_close">&#x2573</a><div class="modal_content"</div></div>');
-			$(pop_up).hide().appendTo('.block_page').fadeIn(200);
+			$(pop_up).hide().appendTo('.block_page').fadeIn(options.fade);
 			$('.modal_content').load(template);
 
 			 			 
 	$('.modal_close').click(function(){
-            $('.block_page').fadeOut().remove();		
-            $(this).parent().fadeOut().remove();			 
+            $('.block_page').fadeOut(options.fade, function(){
+            	$(this).remove()
+            });		
+            $(this).parent().fadeOut(options.fade, function(){
+            	$(this).remove()
+            });		 
 	});
 }
 		return this.click(function(e){
 			var modalOpen = $('.modal_box');
 			if (modalOpen){
-				$('.block_page').fadeOut().remove();		
-            	$('.modal_box').fadeOut().remove();
-			}
+				$('.block_page').fadeOut(options.fade, function(){
+            		$(this).remove()
+            	});		 		
+            	$('.modal_box').fadeOut(options.fade, function(){
+            		$(this).remove()
+            	});	
+            }	 
+
 			add_block_page();
 			add_popup_box();
 			add_styles();
 			
-			$('.modal').fadeIn();
-		});
+			$('.modal').fadeIn(options.fade);
+		}); 
 				 		
 		return this;
 	};
