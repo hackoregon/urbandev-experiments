@@ -45,7 +45,8 @@ JSON
     "Race" {
       "Years" : [1990, 2000, 2009, 2014],
       "Values" : [{
-        "White":"50",
+        "White":"50%",
+        "Hispanic":"50%"
       }] 
     },
     "Race" { ... }

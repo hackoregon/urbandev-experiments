@@ -25,8 +25,6 @@ Highcharts.setOptions({
    },
    colors: [
       '#7ec9ac',
-      '#c9aa7e',
-      '#1d9fd3',
       '#e06d5e',
       "#9d7ec9",
       "#fcead5",

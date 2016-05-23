@@ -21,7 +21,7 @@ var neighborhoods = {
     disableDefaultUI: true
   },
   hoverStyle:{     
-    fillOpacity: 0.6, 
+    fillOpacity: 0.9, 
     strokeWeight: 2
   },
   disabledStyle : {    
@@ -32,13 +32,13 @@ var neighborhoods = {
   },
   selectedStyle : {    
     strokeWeight: 4,
-    fillOpacity: 0.8, 
+    fillOpacity: 0.7, 
     fillColor: "#7ec9ac",
     zIndex: 3
   },
   blockgroupStyle : {    
     strokeWeight: 0.5,
-    fillOpacity: 0.7, 
+    fillOpacity: 0.9, 
     fillColor: "red",
     zIndex: 1
   } 
@@ -133,21 +133,36 @@ neighborhoods.resizeMap = function() {
 
 neighborhoods.createGraph = function( data ) {
     
-    if(!data) {
-      data = {"Values":null,"Months":null};
+    if( !data ) {
+      data = {};
+      data.MedianValue_sqft = {"Values":null,"Months":null};
+      data.MedianSold_sqft = {"Values":null,"Months":null};
+      data.ZRI_sqft = {"Values":null,"Months":null};
+    }
+    
+    if( !data.MedianValue_sqft ) {
+      data.MedianValue_sqft = {"Values":null,"Months":null};
+    }
+
+    if( !data.MedianSold_sqft ) {
+      data.MedianSold_sqft = {"Values":null,"Months":null};
+    }
+
+    if( !data.ZRI_sqft ) {
+      data.ZRI_sqft = {"Values":null,"Months":null};
     }
 
     $('#graph-home-value').highcharts({
         chart: {
             backgroundColor: '#F5F5F5',
-            type: 'line'
+            type: 'spline'
         },
         title: {
             text: '',
             x: -20
         },
         xAxis: {
-            categories: data.Months
+            categories: data.MedianValue_sqft.Months
         },
         yAxis: {
             title: {
@@ -161,8 +176,14 @@ neighborhoods.createGraph = function( data ) {
         },
         series: [{
             name: 'Median Home Value per sqft',         
-            data: data.Values
-        }],
+            data: data.MedianValue_sqft.Values
+        },
+        {
+            name: 'Median Home Sold Price per sqft',      
+            data: data.MedianSold_sqft.Values,
+            connectNulls: true
+        }
+        ],
         lang: {
             noData: "No Data",
             y: -50
@@ -176,47 +197,95 @@ neighborhoods.createGraph = function( data ) {
             }
         }        
     });
+    $('#graph-zri').highcharts({
+            chart: {
+                backgroundColor: '#F5F5F5',
+                type: 'spline'
+            },
+            title: {
+                text: '',
+                x: -20
+            },
+            xAxis: {
+                categories: data.ZRI_sqft.Months
+            },
+            yAxis: {
+                title: {
+                    enabled: false
+                },
+                plotLines: [{
+                    value: 0,
+                    width: 1,
+                    color: '#808080'
+                }]
+            },
+            series: [{
+                name: 'Zillow Rental Index',         
+                data: data.ZRI_sqft.Values
+            }
+            ],
+            lang: {
+                noData: "No Data",
+                y: -50
+            },
+            noData: {
+              position: {y: -30},
+                style: {
+                    fontWeight: 'bold',
+                    fontSize: '15px',
+                    color: '#303030'
+                }
+            }        
+        });
+        $('#graph-radar').highcharts({
+          chart: {
+              backgroundColor: '#F5F5F5',
+              polar: true,
+              type: 'line'
+          },
 
-    $('#container-one').highcharts({
+          title: {
+              text: '',
+              x: -80
+          },
 
-        chart: {
-            polar: true,
-            type: 'line'
-        },
+          pane: {
+              size: '80%'
+          },
 
-        title: {
-            text: 'Budget vs spending',
-            x: -80
-        },
+          xAxis: {
+              categories: ['Population', 'Home Value', 'Crime', 'Demolitions'],
+              tickmarkPlacement: 'on',
+              lineWidth: 0
+          },
 
-        pane: {
-            size: '80%'
-        },
+          yAxis: {
+              gridLineInterpolation: 'polygon',
+              lineWidth: 0,
+              min: 0
+          },
 
-        xAxis: {
-            categories: ['Population', '% Home Owners', '% Renters', 'Crime', 'Income'],
-            tickmarkPlacement: 'on',
-            lineWidth: 0
-        },
+          tooltip: {
+              shared: true,
+              pointFormat: '<span style="color:{series.color}">{series.name}: <b>{point.y} %</b><br/>'
+          },
 
-        yAxis: {
-            gridLineInterpolation: 'polygon',
-            lineWidth: 0,
-            min: 0
-        },
+          legend: {
+              enabled: false
+          },
 
-        tooltip: {
-            shared: true,
-            pointFormat: '<span style="color:{series.color}">{series.name}: <b>${point.y:,.0f}</b><br/>'
-        },
+          series: [{
+              name: 'Portland Average',
+              data: [23, 12, 65, 43],
+              pointPlacement: 'on'
+          }, {
+              name: 'Actual Value',
+              data: [37, 9, 24, 28],
+              pointPlacement: 'on'
+          }]
 
-        series: [{
-            name: 'Allocated Budget',
-            data: [43000, 19000, 60000, 35000],
-            pointPlacement: 'on'
-        }]
+      });
 
-    });    
 };
 
 neighborhoods.selectRegion = function( regionID ) { 
@@ -224,6 +293,10 @@ neighborhoods.selectRegion = function( regionID ) {
   var regionID = regionID + '', // make sure this is a string
       that = this,
       dataPath = "/data/" + regionID + ".json";
+      
+      // need to enable CORS for this to work 
+      //dataPath = "http://ec2-52-88-193-136.us-west-2.compute.amazonaws.com/2016/zillow/v1/" + regionID + ".json";
+      
 
   var updateView = function(d){
     
@@ -250,7 +323,6 @@ neighborhoods.selectRegion = function( regionID ) {
     that.createGraph(d);
 
     // populate census graphs?
-
     that.map.data.forEach(function(feature) {
         //If you want, check here for some constraints.
         if( typeof feature.getProperty('NAMELSAD10') != 'undefined' ) {
@@ -265,15 +337,12 @@ neighborhoods.selectRegion = function( regionID ) {
     url: dataPath,
     success: function (data) {
       
+      updateView(data.Zillow);
+      
       // load blockgroups geojson
-      // console.log( data.Blockgroups );
-      // all features loaded after zillow are blockgroups
-      //that.map.data.setStyle(function(feature) {
-      //  return that.blockgroupStyle;
-      //});
-
-      updateView(data.Zillow.MedianValue_sqft);
-      that.map.data.addGeoJson(data.Blockgroups[0]);
+      if( typeof data.Blockgroups != 'undefined' && data.Blockgroups.length ) {
+        that.map.data.addGeoJson(data.Blockgroups[0]);  
+      }      
     },
     error: function (e) {
       console.log("error getting data");
