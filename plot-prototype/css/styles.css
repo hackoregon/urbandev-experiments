@@ -82,7 +82,7 @@ header .disabled {
   position: absolute;
   top: 65px;
   left:10px;
-  z-index:999;
+  z-index:5;
   background: #444;
   color:#fff;
   padding:10px;

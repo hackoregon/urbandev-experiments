@@ -11,32 +11,12 @@ function sortByName(a, b){
   return ((aName < bName) ? -1 : ((aName > bName) ? 1 : 0));
 }
 
-function openModal(type){
-  
-}
-
-function toggle(){
-  if (isModalOpen()){
-    $('.block_page').remove();
-  } else {
-    var block_page = $('<div class="block_page"></div>');     
-    $(block_page).appendTo('body');
-  }  
-}
-
-function isModalOpen(){
-  return $('.block_page');
-}
-
 function registerNavModals(){
-    $('.nav-item').modal();
-
   var navItems = $('.nav-item');
   navItems.each(function(index, item){
-    var type = item.innerHTML;
-    $(item).on('click', function($){
-      openModal(type)
-    });
+    var type = item.innerHTML,
+    template = './templates/' + type + '.html';
+    $(item).modal(template);
   });
 }
 
