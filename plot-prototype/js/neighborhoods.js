@@ -44,6 +44,12 @@ var neighborhoods = {
   } 
 };
 
+neighborhoods.showHide = function () {
+  console.log( $(this) );
+};
+
+
+
 neighborhoods.createNeighborhoodsDropdown = function () {
 
   var html = "",
@@ -397,6 +403,22 @@ neighborhoods.init = function() {
     else {
       that.selectRegion( event.feature.H.REGIONID );  
     } 
+  });
+
+  $(".show-hide").click(function(){
+  
+    var elem = $(this),
+        body = elem.parent().find(".data-body")
+
+    if( body.is(':visible') ) {
+      body.slideUp();
+      elem.text('Show');
+    }
+    else {
+      body.slideDown();
+      elem.text('Hide');
+    }
+    console.log(body);
   });
 
   // resize map and set up autosizing events
