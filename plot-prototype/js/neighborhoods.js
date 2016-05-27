@@ -17,24 +17,28 @@ var neighborhoods = {
     zoomControl: true,
     center: new google.maps.LatLng(45.52306220000001,-122.67648159999999),
     mapTypeId: google.maps.MapTypeId.ROADMAP,
-    styles: [{stylers: [{saturation: -100}]}],
+    styles: [{"featureType":"all","elementType":"all","stylers":[{"lightness":"29"},{"invert_lightness":true},{"hue":"#008fff"},{"saturation":"-73"}]},{"featureType":"all","elementType":"labels","stylers":[{"saturation":"-72"}]},{"featureType":"administrative","elementType":"all","stylers":[{"lightness":"32"},{"weight":"0.42"},{"saturation":"0"}]},{"featureType":"administrative","elementType":"labels","stylers":[{"visibility":"on"},{"lightness":"64"},{"saturation":"-45"},{"weight":"1.02"}]},{"featureType":"landscape","elementType":"all","stylers":[{"lightness":"-95"},{"gamma":"1.13"}]},{"featureType":"landscape","elementType":"geometry.fill","stylers":[{"hue":"#006dff"},{"lightness":"4"},{"gamma":"1.44"},{"saturation":"-67"}]},{"featureType":"landscape","elementType":"geometry.stroke","stylers":[{"lightness":"5"}]},{"featureType":"landscape","elementType":"labels.text.fill","stylers":[{"visibility":"off"}]},{"featureType":"poi","elementType":"all","stylers":[{"visibility":"off"}]},{"featureType":"poi","elementType":"labels.text.fill","stylers":[{"weight":"0.84"},{"gamma":"0.5"}]},{"featureType":"poi","elementType":"labels.text.stroke","stylers":[{"visibility":"off"},{"weight":"0.79"},{"gamma":"0.5"}]},{"featureType":"road","elementType":"all","stylers":[{"visibility":"simplified"},{"lightness":"-78"},{"saturation":"-91"},{"color":"#1e1e1e"}]},{"featureType":"road","elementType":"labels.text","stylers":[{"color":"#ffffff"},{"lightness":"-49"}]},{"featureType":"road","elementType":"labels.icon","stylers":[{"visibility":"off"}]},{"featureType":"road.highway","elementType":"geometry.fill","stylers":[{"lightness":"5"},{"color":"#bdb325"}]},{"featureType":"road.highway","elementType":"labels.icon","stylers":[{"visibility":"off"}]},{"featureType":"road.arterial","elementType":"geometry.fill","stylers":[{"lightness":"10"},{"gamma":"1"}]},{"featureType":"road.local","elementType":"geometry.fill","stylers":[{"lightness":"10"},{"saturation":"-100"}]},{"featureType":"transit","elementType":"all","stylers":[{"lightness":"-35"}]},{"featureType":"transit","elementType":"labels.text.stroke","stylers":[{"visibility":"off"}]},{"featureType":"water","elementType":"all","stylers":[{"saturation":"-97"},{"lightness":"-14"},{"color":"#000000"}]}],
     disableDefaultUI: true
   },
-  hoverStyle:{     
-    fillOpacity: 0.9, 
-    strokeWeight: 2
+  hoverStyle:{   
+    strokeColor: "#FFFFFF",  
+    fillOpacity: 0.6, 
+    strokeWeight: 2,
+    zIndex: 4
   },
   disabledStyle : {    
     strokeWeight: 1,
-    fillOpacity: 0.6, 
-    fillColor: "#1396d9",
+    strokeColor: "#979797",
+    fillOpacity: 0.15, 
+    fillColor: "#FFFFFF",
     zIndex: 2
   },
   selectedStyle : {    
-    strokeWeight: 4,
-    fillOpacity: 0.7, 
-    fillColor: "#7ec9ac",
-    zIndex: 3
+    strokeWeight: 2,
+    strokeColor: "#51A1e3",
+    fillOpacity: 0.0, 
+    fillColor: "#FFFFFF",
+    zIndex: 5
   },
   blockgroupStyle : {    
     strokeWeight: 0.5,
@@ -154,7 +158,7 @@ neighborhoods.createGraph = function( data ) {
 
     $('#graph-home-value').highcharts({
         chart: {
-            backgroundColor: '#F5F5F5',
+            backgroundColor: '#343434',
             type: 'spline'
         },
         title: {
@@ -199,7 +203,7 @@ neighborhoods.createGraph = function( data ) {
     });
     $('#graph-zri').highcharts({
             chart: {
-                backgroundColor: '#F5F5F5',
+                backgroundColor: '#343434',
                 type: 'spline'
             },
             title: {
@@ -239,7 +243,7 @@ neighborhoods.createGraph = function( data ) {
         });
         $('#graph-radar').highcharts({
           chart: {
-              backgroundColor: '#F5F5F5',
+              backgroundColor: '#343434',
               polar: true,
               type: 'line'
           },

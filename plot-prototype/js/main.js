@@ -28,8 +28,8 @@ Highcharts.setOptions({
    credits: false,
    chart: {
       style: {
-         fontFamily: 'Lato',
-         backgroundColor: '#FCFFC5'
+         fontFamily: 'Dosis',
+         backgroundColor: '#343434'
       }
    },
    colors: [
