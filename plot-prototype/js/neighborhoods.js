@@ -12,7 +12,7 @@ var neighborhoods = {
   neighborhoodsArray : [],
   neighborhoodsObject : {},
   googleMapParams : {
-    zoom: 12,
+    zoom: 11,
     panControl: true,
     zoomControl: true,
     center: new google.maps.LatLng(45.52306220000001,-122.67648159999999),
