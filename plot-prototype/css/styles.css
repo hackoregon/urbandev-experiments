@@ -13,7 +13,9 @@ html, body {
 .pull-right {
     float: right!important;
 }
-
+a.show-hide {
+  color:#ccc;
+}
 #map {
   width: 100%;
   height:100%;

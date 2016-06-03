@@ -19,6 +19,10 @@ function registerNavModals(){
     $(item).modal(template);
   });
 }
+function toTitleCase(str){
+    return str.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
+}
+
 
 // Highcharts General Options
 Highcharts.setOptions({
@@ -38,18 +42,20 @@ Highcharts.setOptions({
       "#9d7ec9",
       "#fcead5",
       '#66A1B7',
-      '#FFCC89',
-      '#FFC189',
-      '#683E81',
-      '#357573',
-      '#C18657',
-      '#C1C057',
-      '#2C9D6C'
+      '#4FA3DB',
+      '#2373a9',
+      '#16486a'
    ]
 });
 
 jQuery(document).ready(function($) {
   neighborhoods.init();	
   registerNavModals();
+
+  // For testing only
+  /*setTimeout(function(){
+    neighborhoods.selectRegion(274797);
+  }, 1200);*/
+
 });
 

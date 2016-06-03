@@ -143,23 +143,24 @@ neighborhoods.resizeMap = function() {
 
 neighborhoods.createGraph = function( data ) {
     
-    if( !data ) {
+    console.log(data);
+    if( !data.Zillow ) {
       data = {};
-      data.MedianValue_sqft = {"Values":null,"Months":null};
-      data.MedianSold_sqft = {"Values":null,"Months":null};
-      data.ZRI_sqft = {"Values":null,"Months":null};
+      data.Zillow.MedianValue_sqft = {"Values":null,"Months":null};
+      data.Zillow.MedianSold_sqft = {"Values":null,"Months":null};
+      data.Zillow.ZRI_sqft = {"Values":null,"Months":null};
     }
     
-    if( !data.MedianValue_sqft ) {
-      data.MedianValue_sqft = {"Values":null,"Months":null};
+    if( !data.Zillow.ZillowMedianValue_sqft ) {
+      data.Zillow.MedianValue_sqft = {"Values":null,"Months":null};
     }
 
-    if( !data.MedianSold_sqft ) {
-      data.MedianSold_sqft = {"Values":null,"Months":null};
+    if( !data.Zillow.MedianSold_sqft ) {
+      data.Zillow.MedianSold_sqft = {"Values":null,"Months":null};
     }
 
-    if( !data.ZRI_sqft ) {
-      data.ZRI_sqft = {"Values":null,"Months":null};
+    if( !data.Zillow.ZRI_sqft ) {
+      data.Zillow.ZRI_sqft = {"Values":null,"Months":null};
     }
 
     $('#graph-home-value').highcharts({
@@ -167,12 +168,17 @@ neighborhoods.createGraph = function( data ) {
             backgroundColor: '#343434',
             type: 'spline'
         },
+        legend: {
+        itemStyle: {
+              color: 'white'
+          }
+        },
         title: {
             text: '',
             x: -20
         },
         xAxis: {
-            categories: data.MedianValue_sqft.Months
+            categories: data.Zillow.MedianValue_sqft.Months
         },
         yAxis: {
             title: {
@@ -186,11 +192,11 @@ neighborhoods.createGraph = function( data ) {
         },
         series: [{
             name: 'Median Home Value per sqft',         
-            data: data.MedianValue_sqft.Values
+            data: data.Zillow.MedianValue_sqft.Values
         },
         {
             name: 'Median Home Sold Price per sqft',      
-            data: data.MedianSold_sqft.Values,
+            data: data.Zillow.MedianSold_sqft.Values,
             connectNulls: true
         }
         ],
@@ -212,12 +218,17 @@ neighborhoods.createGraph = function( data ) {
                 backgroundColor: '#343434',
                 type: 'spline'
             },
+            legend: {
+              itemStyle: {
+                  color: 'white'
+              }
+            },            
             title: {
                 text: '',
                 x: -20
             },
             xAxis: {
-                categories: data.ZRI_sqft.Months
+                categories: data.Zillow.ZRI_sqft.Months
             },
             yAxis: {
                 title: {
@@ -231,7 +242,7 @@ neighborhoods.createGraph = function( data ) {
             },
             series: [{
                 name: 'Zillow Rental Index',         
-                data: data.ZRI_sqft.Values
+                data: data.Zillow.ZRI_sqft.Values
             }
             ],
             lang: {
@@ -253,16 +264,18 @@ neighborhoods.createGraph = function( data ) {
               polar: true,
               type: 'line'
           },
-
+          legend: {
+              itemStyle: {
+                  color: 'white'
+              }
+          },
           title: {
               text: '',
               x: -80
           },
-
           pane: {
               size: '80%'
           },
-
           xAxis: {
               categories: ['Population', 'Home Value', 'Crime', 'Demolitions'],
               tickmarkPlacement: 'on',
@@ -293,8 +306,97 @@ neighborhoods.createGraph = function( data ) {
               data: [37, 9, 24, 28],
               pointPlacement: 'on'
           }]
-
       });
+    $('#graph-ethnicity').highcharts({
+        chart: {
+            backgroundColor: '#343434',
+            plotBorderWidth: 0,
+            plotShadow: false,
+            marginTop: -50
+        },
+        title: {
+            text: '',
+            style: {
+                display: 'none'
+            }
+        },
+        subtitle: {
+            text: '',
+            style: {
+                display: 'none'
+            }
+        },
+        tooltip: {
+            pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+        },
+        plotOptions: {
+            pie: {
+                dataLabels: {
+                    enabled: true,
+                    distance: -50,
+                    style: {
+                        fontWeight: 'bold',
+                        color: 'white',
+                        textShadow: '0px 1px 2px black'
+                    }
+                },
+                startAngle: -90,
+                endAngle: 90,
+                center: ['50%', '75%']
+            }
+        },
+        series: [{
+            type: 'pie',
+            name: 'Ethnicity',
+            innerSize: '50%',
+            data: data.Ethnicity
+        }]
+    });
+    $('#graph-crime').highcharts({
+        chart: {
+            backgroundColor: '#343434',
+            plotBorderWidth: 0,
+            plotShadow: false,
+            marginTop: -50
+        },
+        title: {
+            text: '',
+            style: {
+                display: 'none'
+            }
+        },
+        subtitle: {
+            text: '',
+            style: {
+                display: 'none'
+            }
+        },
+        tooltip: {
+            pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+        },
+        plotOptions: {
+            pie: {
+                dataLabels: {
+                    enabled: true,
+                    distance: -50,
+                    style: {
+                        fontWeight: 'bold',
+                        color: 'white',
+                        textShadow: '0px 1px 2px black'
+                    }
+                },
+                startAngle: -90,
+                endAngle: 90,
+                center: ['50%', '75%']
+            }
+        },
+        series: [{
+            type: 'pie',
+            name: 'Violent Crime',
+            innerSize: '50%',
+            data: data.VCrime
+        }]
+    });
 
 };
 
@@ -305,8 +407,7 @@ neighborhoods.selectRegion = function( regionID ) {
       dataPath = "/data/" + regionID + ".json";
       
       // need to enable CORS for this to work 
-      //dataPath = "http://ec2-52-88-193-136.us-west-2.compute.amazonaws.com/2016/zillow/v1/" + regionID + ".json";
-      
+      //dataPath = "http://ec2-52-88-193-136.us-west-2.compute.amazonaws.com/2016/zillow/v1/" + regionID + ".json"      
 
   var updateView = function(d){
     
@@ -329,7 +430,7 @@ neighborhoods.selectRegion = function( regionID ) {
     // trigger resize (to make sure map updates) ????
     google.maps.event.trigger(map, 'resize');
 
-    // populate zillow graph
+    // populate graphs
     that.createGraph(d);
 
     // populate census graphs?
@@ -347,12 +448,70 @@ neighborhoods.selectRegion = function( regionID ) {
     url: dataPath,
     success: function (data) {
       
-      updateView(data.Zillow);
+      // Todo : pie chart creator function
+
+
+      // Pre-process Ethnicity data, to two-dimensional array
+      console.log(data);
+      if( data.Race && data.Race.Values) {
+
+        var d = data.Race.Values[0]; //testing use first period
+        var k = Object.keys(d);   
+        var v = [];
+        for(var key in d) {
+            v.push( d[key] );
+        }
+
+        data.Ethnicity = [];
+
+        for( var i=0; i < v.length; i++) {
+          
+          if( k[i] == "total" ) continue;
+
+          var elem = {
+              name: toTitleCase( k[i].replace(/_/g,' ') ),
+              y: v[i],
+              dataLabels: {
+                  //enabled: false
+              }
+          };
+
+          data.Ethnicity.push(elem);
+        }
+      }
+      if( data.ViolentCrime && data.ViolentCrime.Values) {
+
+        var d = data.ViolentCrime.Values[0]; //testing use first period
+        var k = Object.keys(d);   
+        var v = [];
+        for(var key in d) {
+            v.push( d[key] );
+        }
+
+        data.VCrime = [];
+
+        for( var i=0; i < v.length; i++) {
+          
+          if( k[i] == "total" ) continue;
+
+          var elem = {
+              name: toTitleCase( k[i].replace(/_/g,' ') ),
+              y: v[i],
+              dataLabels: {
+                  //enabled: false
+              }
+          };
+
+          data.VCrime.push(elem);
+        }
+      }      
+
+      updateView(data);
       
       // load blockgroups geojson
-      if( typeof data.Blockgroups != 'undefined' && data.Blockgroups.length ) {
-        that.map.data.addGeoJson(data.Blockgroups[0]);  
-      }      
+      //if( typeof data.Blockgroups != 'undefined' && data.Blockgroups.length ) {
+      //  that.map.data.addGeoJson(data.Blockgroups[0]);  
+      //}      
     },
     error: function (e) {
       console.log("error getting data");
@@ -422,8 +581,9 @@ neighborhoods.init = function() {
       body.slideDown();
       elem.text('Hide');
     }
-    console.log(body);
   });
+
+  $(".show-hide").click();
 
   // resize map and set up autosizing events
   this.resizeMap();
