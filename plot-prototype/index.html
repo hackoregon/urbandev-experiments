@@ -1,81 +1,90 @@
 <!DOCTYPE html>
 <html>
-  <head>
+<head>
     <title>PlotPDX Prototype</title>
     <meta name="viewport"
-        content="width=device-width, initial-scale=1.0, user-scalable=no">
+          content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta charset="UTF-8">
-    <link href='https://fonts.googleapis.com/css?family=Dosis:400,300,500|Roboto+Slab:400,700,300' rel='stylesheet' type='text/css'>
+    <link
+        href='https://fonts.googleapis.com/css?family=Dosis:400,300,500|Roboto+Slab:400,700,300'
+        rel='stylesheet' type='text/css'>
     <link rel="stylesheet" href="css/select2.min.css">
     <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
-  <header>
-      <div class="header-wrap">
-      <a href="index.html"><div class="logo-wrap">
-        <div class="title-text1">Plot</div><div class="title-text2">PDX</div>
-      </div>
-      </a>
-        <nav class="nav pull-right">            
+<header>
+    <div class="header-wrap">
+        <a href="index.html">
+            <div class="logo-wrap">
+                <div class="title-text1">Plot</div>
+                <div class="title-text2">PDX</div>
+            </div>
+        </a>
+        <nav class="nav pull-right">
             <a class="nav-item" href="#">About</a>
             <a class="nav-item" href="#">Stories</a>
             <a class="nav-item" href="#">Share</a>
         </nav>
-      </div>
-  </header>
-  <div id="neighborhood-hover">None</div>
-  <div id="map"></div>
-  <div id="sidebar">
-    <div class="sidebar-header">      
-      <div class="summary-container">
+    </div>
+</header>
+<div id="neighborhood-hover">None</div>
+<div id="map"></div>
+<div id="sidebar">
+    <div class="sidebar-header">
+        <div class="summary-container">
             <div id="neighborhood-summary">23</div>
             <div class="summary-label">Total Neighborhoods</div>
-      </div>
-      <h2>Explore Portland Neighborhoods</h2> 
-      <select id="neighborhood-dropdown"></select>
+        </div>
+        <h2>Explore Portland Neighborhoods</h2>
+        <select id="neighborhood-dropdown"></select>
     </div>
     <div class="sidebar-body">
-      <div class="data-section">
-        <a class="pull-right show-hide" href="#">Hide</a>
-        <h2>Demographics Data</h2>
-        <div class="data-body">
-          <div id="graph-radar" style="min-width: 490px; height: 300px; margin: 0 auto; margin-top:40px;"></div>
+        <div class="data-section">
+            <a class="pull-right show-hide" href="#">Hide</a>
+            <h2>Demographics Data</h2>
+            <div class="data-body">
+                <div id="graph-radar"
+                     style="min-width: 490px; height: 300px; margin: 0 auto; margin-top:40px;"></div>
+            </div>
         </div>
-      </div>
-      <div class="data-section">
-        <a class="pull-right show-hide" href="#">Hide</a>
-        <h2>Home Values</h2>
-        <div class="data-body">
-          <div id="graph-home-value" style="min-width: 490px; height: 300px; margin: 0 auto; margin-top:40px;"></div>
-          <!--<div id="graph-zri" style="min-width: 310px; height: 300px; margin: 0 auto; margin-top:40px;"></div>-->
+        <div class="data-section">
+            <a class="pull-right show-hide" href="#">Hide</a>
+            <h2>Home Values</h2>
+            <div class="data-body">
+                <div id="graph-home-value"
+                     style="min-width: 490px; height: 300px; margin: 0 auto; margin-top:40px;"></div>
+                <!--<div id="graph-zri" style="min-width: 310px; height: 300px; margin: 0 auto; margin-top:40px;"></div>-->
+            </div>
         </div>
-      </div>
-      <div class="data-section">
-        <a class="pull-right show-hide" href="#">Hide</a>
-        <h2>Ethnicity</h2>
-        <div class="data-body">
-          <div id="graph-ethnicity" style="min-width: 490px; height:300px; margin: 0 auto; margin-top:0px;"></div>          
+        <div class="data-section">
+            <a class="pull-right show-hide" href="#">Hide</a>
+            <h2>Ethnicity</h2>
+            <div class="data-body">
+                <div id="graph-ethnicity"
+                     style="min-width: 490px; height:300px; margin: 0 auto; margin-top:0px;"></div>
+            </div>
         </div>
-      </div>
-      <div class="data-section">
-        <a class="pull-right show-hide" href="#">Hide</a>
-        <h2>Crime</h2>
-        <div class="data-body">
-          <div id="graph-crime" style="min-width: 490px; height:300px; margin: 0 auto; margin-top:0px;"></div>          
+        <div class="data-section">
+            <a class="pull-right show-hide" href="#">Hide</a>
+            <h2>Crime</h2>
+            <div class="data-body">
+                <div id="graph-crime"
+                     style="min-width: 490px; height:300px; margin: 0 auto; margin-top:0px;"></div>
+            </div>
         </div>
-      </div>            
     </div>
-  </div>
+</div>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyArYK7KwuH-UdHv2SW_M-P7IzN0ThqGBE0&libraries=visualization"></script>
+<script
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyArYK7KwuH-UdHv2SW_M-P7IzN0ThqGBE0&libraries=visualization"></script>
 <!-- Backup Key: AIzaSyAUfNZJ6VK1S3HroCxIcgufeG68M8aUmvw -->
 <script src="https://code.highcharts.com/highcharts.js"></script>
 <script src="https://code.highcharts.com/highcharts-more.js"></script>
 <script src="https://code.highcharts.com/modules/no-data-to-display.js"></script>
 <script src="js/infobox.js"></script>
 <script src="js/select2.min.js"></script>
-<script src="js/neighborhoods.js"></script>  
-<script src="js/main.js"></script> 
+<script src="js/neighborhoods.js"></script>
+<script src="js/main.js"></script>
 <script src="js/modal.js"></script>
 </body>
 </html>
