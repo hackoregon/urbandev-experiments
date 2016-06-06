@@ -1,158 +1,197 @@
-*, *:before, *:after {
-  box-sizing: inherit;
+/*Plot PDX CSS
+
+TABLE OF CONTENTS
+
+- Global
+- Utility
+- Headers
+- Nav
+- Map
+- Sidebar
+- Graphs
+- Forms
+- Modals
+- Buttons
+
+Z-INDEX DECLARATIONS
+
+neighborhood hover 1000
+main-header 9000
+
+*/
+
+
+/*GLOBAL
+_____________________________________________________________*/
+
+*,
+*:before,
+*:after {
+    box-sizing: inherit;
 }
 
-html, body {
-  margin: 0;
-  padding: 0;
-  font-family: "Dosis", sans-serif;
-  box-sizing: border-box;
-  overflow-y:scroll;
+html,
+body {
+    box-sizing: border-box;
+    font-family: "Dosis", sans-serif;
+    margin: 0;
+    overflow-y: scroll;
+    padding: 0;
 }
+
+
+/*UTILITY
+_____________________________________________________________*/
 
 .pull-right {
-    float: right!important;
-}
-a.show-hide {
-  color:#ccc;
-}
-#map {
-  width: 100%;
-  height:100%;
-  position: absolute;
+    float: right !important;
 }
 
-header {
-    height: 55px;
-    color: white;
+.show-hide {
+    color: #ccc;
+}
+
+.show-hide:hover {
+    color: #51a1e3;
+}
+
+.disabled {
+    cursor: none;
+    opacity: 0.5;
+}
+
+
+/*HEADERS
+_____________________________________________________________*/
+
+.main-header {
     background: #e8dc3a;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    text-align: center;
-    margin: 0px auto;
-    z-index: 999999;
     box-shadow: none;
+    color: white;
+    height: 55px;
+    left: 0;
+    margin: 0 auto;
+    position: fixed;
+    text-align: center;
+    top: 0;
+    width: 100%;
+    z-index: 9000;
 }
 
-header .header-wrap {
-  width: 100%
+.main-header-wrap {
+    width: 100%
 }
 
 .logo-wrap {
-  width: 100%;
-  height: 100%;
-  padding-left: 40px;
-  position: relative;
-  top: 10px;
+    height: 100%;
+    padding-left: 40px;
+    position: relative;
+    top: 10px;
+    width: 100%;
 }
 
-header .title-text1 {
-    position: relative;
+.title-text {
+    color: #000000;
     float: left;
-    color: #000000;
-    font-weight: 400;
+    font-family: 'Roboto Slab', monospace;
     font-size: 25px;
-    font-family: Roboto Slab, monospace;
-}
-
-header .title-text2 {
-  position: relative;
-  float: left;
-  font-family: Roboto Slab, monospace;
-  font-weight: 700;
-  font-size: 25px;
-  color: #000000;
-}
-
-nav {
-    margin-right: 40px;
-}    
-.nav-item {
+    font-weight: 400;
     position: relative;
-    display: inline-block;
-    padding: 0px 11px;
+}
+
+.title-text-bold {
+    font-weight: 700;
+}
+
+/*NAV
+_____________________________________________________________*/
+
+.main-nav {
+    margin-right: 40px;
+}
+
+.nav-item {
     color: #000000;
-    text-decoration: none;
-    font-weight: 300;
+    display: inline-block;
+    font-family: 'Dosis', sans-serif;
     font-size: 18px;
+    font-weight: 300;
     line-height: 55px;
-    font-family: Dosis;
+    padding: 0 11px;
+    position: relative;
+    text-decoration: none;
 }
 
-header .start-button,header .stop-button {
-  text-decoration:underline; 
-  cursor:pointer;
-  font-weight:bold;
+#map {
+    height: 100%;
+    position: absolute;
+    width: 100%;
 }
 
-header .disabled {
-  cursor: normal;
-  opacity: 0.5;
-}
+/*SIDEBAR
+_____________________________________________________________*/
 
 #neighborhood-hover {
-    position: absolute;
-    bottom: 0px;
-    left: 0px;
-    width: 170px;
-    z-index: 5;
     background: #e8dc3a;
+    border-radius: 0;
+    bottom: 0;
     color: #000000;
-    padding: 10px;
-    border-radius: 0px;
-    text-align: center;
+    font-family: 'Roboto Slab', monospace;
     font-size: 20px;
-    font-family: Roboto Slab;
+    left: 0;
+    padding: 10px;
+    position: absolute;
+    text-align: center;
+    width: 170px;
+    z-index: 1000;
 }
 
 #sidebar {
-  width:550px;
-  height:100%;
-  position: absolute;
-  right: 0;
-  top: 55px;  
-  background: #f5f5f5;
-  box-shadow: 0px 0px 40px rgba(0, 0, 0, 0.2);
+    background: #f5f5f5;
+    box-shadow: 0 0 40px rgba(0, 0, 0, 0.2);
+    height: 100%;
+    position: absolute;
+    right: 0;
+    top: 55px;
+    width: 550px;
 }
 
-#sidebar .sidebar-header {
-  height: 130px;
-  background: #343434;
-  padding: 25px;
+.sidebar-header {
+    background: #343434;
+    height: 130px;
+    padding: 25px;
 }
 
-#sidebar .sidebar-header h2 {
-  margin-top:0;
-  font-size: 20px;
-  margin-bottom: 5px;
-  font-family: Roboto Slab;
-  color: white;
-}
-
-#sidebar .sidebar-body {
-  overflow-y: auto;
-  position: absolute;
-  width: 550px;
-  top: 130px;
-  right: 0;
-  bottom:0;
-  background-color: #343434;
-}
-
-#sidebar .data-section {
-  padding: 0 30px;
-}
-
-#sidebar .data-section h2 {
+.sidebar-header-title {
+    color: white;
     font-family: 'Roboto Slab', monospace;
-    font-size: 1.4em;
-    margin-top: 20px;
-    padding-bottom: 5px;
-    margin-bottom: 20px;
+    font-size: 20px;
+    margin-bottom: 5px;
+    margin-top: 0;
+}
+
+.sidebar-body {
+    background-color: #343434;
+    bottom: 0;
+    overflow-y: auto;
+    position: absolute;
+    right: 0;
+    top: 130px;
+    width: 550px;
+}
+
+.data-section {
+    padding: 0 30px;
+}
+
+.data-section-heading {
     border-bottom: 1px #ccc solid;
     color: #FFFFFF;
+    font-family: 'Roboto Slab', monospace;
+    font-size: 1.4em;
+    margin-bottom: 20px;
+    margin-top: 20px;
+    padding-bottom: 5px;
 }
 
 .summary-container {
@@ -161,110 +200,112 @@ header .disabled {
 }
 
 #neighborhood-summary {
+    color: #51a1e3;
     font-family: 'Dosis', sans-serif;
-    font-weight: bold;
     font-size: 36px;
-    padding-bottom: 0;
-    padding-top: 0;
+    font-weight: bold;
     line-height: 1em;
     margin-top: 24px;
-    color: #51a1e3;
-}
-
-#summary-label {
-    text-align: right;
-    font-size: 0.8em;
-    margin-top: 2px;
+    padding-bottom: 0;
+    padding-top: 0;
 }
 
 .summary-label {
-  color: white;
+    color: white;
 }
 
+
+/*GRAPHS
+_____________________________________________________________*/
+/*TODO: remove inline graph styles from index.html and create class-based selectors*/
+
+/*FORM STYLES
+_____________________________________________________________*/
+
 .neighborhood-label {
-  line-height:24px;
-  font-size:14px;
-  display:block;
+    display: block;
+    font-size: 14px;
+    line-height: 24px;
 }
 
 #neighborhood-dropdown {
-  width: 240px;
-  margin-top:0;
+    margin-top: 0;
+    width: 240px;
 }
 
+/*TODO: add IE9 vendor prefix for linear-gradient if we need to support IE9*/
+/*TODO: remove this CSS block if we do not add an input field to the code*/
 .select2-search input {
-    width: 100%;
-    height: auto !important;
-    min-height: 26px;
-    padding: 4px 20px 4px 5px;
-    margin: 0;
-    outline: 0;
-    font-family: sans-serif;
-    font-size: 1em;
+    background: url('select2.png') no-repeat 100% -22px, linear-gradient(to bottom, #fff 85%, #eee 99%) 0 0; /* Fx 10+, Op 11.6+, Ch 26+, IE 10 */
     border: 1px solid #aaa;
     border-radius: 0;
-    -webkit-box-shadow: none;
     box-shadow: none;
-    background: #fff url('select2.png') no-repeat 100% -22px;
-    background: url('select2.png') no-repeat 100% -22px, -webkit-gradient(linear, left bottom, left top, color-stop(0.85, #fff), color-stop(0.99, #eee));
-    background: url('select2.png') no-repeat 100% -22px, -webkit-linear-gradient(center bottom, #fff 85%, #eee 99%);
-    background: url('select2.png') no-repeat 100% -22px, -moz-linear-gradient(center bottom, #fff 85%, #eee 99%);
-    background: url('select2.png') no-repeat 100% -22px, linear-gradient(to bottom, #fff 85%, #eee 99%) 0 0;
-}
-
-.modal_text {
-  color: #f5f5f5;
-}
-
-.modal_close {
-  color: #f5f5f5;
-  position: absolute;
-  top: 30px !important;
-  right:50px !important;
-  text-decoration: none;
-  font-size: 50px;
+    -webkit-box-shadow: none;
+    font-family: sans-serif;
+    font-size: 1em;
+    height: auto !important;
+    margin: 0;
+    min-height: 26px;
+    outline: 0;
+    padding: 4px 20px 4px 5px;
+    width: 100%;
 }
 
 .select2-container--classic .select2-selection--single .select2-selection__arrow {
     background-color: white;
-    border: none;
-    border-left: none;
-    border-top-right-radius: 4px;
+    background-image: none;
+    background-repeat: no-repeat;
     border-bottom-right-radius: 4px;
+    border-style: none;
+    border-top-right-radius: 4px;
+    filter: none;
     height: 26px;
     position: absolute;
-    top: 1px;
     right: 1px;
+    top: 1px;
     width: 20px;
-    background-image: none;
-    background-image: none;
-    background-image: none;
-    background-repeat: no-repeat;
-    filter: none;
 }
-
 
 .select2-container--classic .select2-selection--single {
-    background-color: #FFFFFF;
+    background: #FFFFFF none no-repeat;
     border: 1px solid #aaa;
-    border-radius: 0px;
-    outline: 0;
-    background-image: none;
-    background-image: none;
-    background-image: none;
-    background-repeat: no-repeat;
+    border-radius: 0;
     filter: none;
+    outline: 0;
 }
 
-
 .select2-container--classic.select2-container--open.select2-container--below .select2-selection--single {
+    background-image: none;
+    background-image: -o-linear-gradient(top, #eee 50%, #fff 100%);
+    background-repeat: no-repeat;
     border-bottom: none;
     border-bottom-left-radius: 0;
     border-bottom-right-radius: 0;
-    background-image: none;
-    background-image: -o-linear-gradient(top, #eee 50%, #fff 100%);
-    background-image: none;
-    background-repeat: none;
     filter: none;
 }
 
+/*MODALS
+_____________________________________________________________*/
+
+.modal_text {
+    color: #f5f5f5;
+}
+
+.modal_close {
+    color: #f5f5f5;
+    font-size: 50px;
+    position: absolute;
+    right: 50px !important;
+    text-decoration: none;
+    top: 30px !important;
+}
+
+/*BUTTON STYLES
+_____________________________________________________________*/
+
+.start-button,
+.stop-button {
+    cursor: pointer;
+    font-weight: bold;
+    text-decoration: underline;
+}
