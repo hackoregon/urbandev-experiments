@@ -74,7 +74,7 @@ _____________________________________________________________*/
     position: fixed;
     text-align: center;
     top: 0;
-    width: 100%;
+    width: 60% !important;
     z-index: 9000;
 }
 
@@ -103,6 +103,17 @@ _____________________________________________________________*/
     font-weight: 700;
 }
 
+.plot-logo {
+    display: inline-block;
+    position: relative;
+    float: left;
+    padding: 0px 2px;
+}
+
+.plot-logo img {
+    width: 30px;
+}
+
 /*NAV
 _____________________________________________________________*/
 
@@ -125,11 +136,23 @@ _____________________________________________________________*/
 #map {
     height: 100%;
     position: absolute;
-    width: 100%;
+    width: 60% !important;
 }
 
 /*SIDEBAR
 _____________________________________________________________*/
+
+
+.hack-oregon-logo {
+    width: 100%;
+    text-align: center;
+    margin: 0 auto;
+    position: relative;
+}
+
+.hack-oregon-logo img {
+    width: 90px;
+}
 
 #neighborhood-hover {
     background: #e8dc3a;
@@ -152,14 +175,17 @@ _____________________________________________________________*/
     height: 100%;
     position: absolute;
     right: 0;
-    top: 55px;
-    width: 550px;
+    top: 0px;
+    width: 40% !important;
+    height: 100% !important;
 }
 
 .sidebar-header {
     background: #343434;
     height: 130px;
     padding: 25px;
+    border-bottom: 1px solid grey;
+    padding: 15px;
 }
 
 .sidebar-header-title {
@@ -168,6 +194,7 @@ _____________________________________________________________*/
     font-size: 20px;
     margin-bottom: 5px;
     margin-top: 0;
+    text-align: center;
 }
 
 .sidebar-body {
@@ -177,7 +204,7 @@ _____________________________________________________________*/
     position: absolute;
     right: 0;
     top: 130px;
-    width: 550px;
+    width: 100%;
 }
 
 .data-section {
@@ -282,6 +309,14 @@ _____________________________________________________________*/
     border-bottom-left-radius: 0;
     border-bottom-right-radius: 0;
     filter: none;
+}
+
+.select2-container {
+    box-sizing: border-box;
+    display: block;
+    position: relative;
+    vertical-align: middle;
+    margin: 0 auto !important;
 }
 
 /*MODALS
